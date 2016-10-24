@@ -13,7 +13,6 @@ from Bio import Entrez
 import os
 import re
 from urllib.error import URLError
-import sys
 import accessionscollector
 
 
@@ -55,38 +54,45 @@ class CollectCompleteGenomes:
            Output: All complete genomes per species
         """
 
-        try:
-            Entrez.email = "elinastellark@gmail.com"         # Tell NCBI who you are
-            # accession_ids = ['CP002842', 'CP004049', 'CP017279', 'CP010424', 'CP010515']
-            found_accessions = []    # List for existing accession id's
-            missing_accessions = []  # List for non existing accession id's
-            accession_ids = acc.accession_list
-            for folders in folder_list:
-                self.folders = folders   # Extract folder names from list
-                for accession in accession_ids:                # Extract accessions from each list
-                    complete_path = self.pathway + self.folders + self.path_separator + accession + ".gb"
-                    if os.path.isfile(complete_path):       # Check which files already are available
-                        found_accessions.append(accession)  # Add accessions that already exist to list
+        restart_program = True
+        count_restarts = 0   # Count total amount of restarts to make it limited
+        while restart_program:  # Restart program if crash due an external error has been encountered
+            try:
+                while True and count_restarts < 35:
+                    restart_program = False    # Do not restart when no error is encountered
+                    Entrez.email = "elinastellark@gmail.com"         # Tell NCBI who you are
+                    # accession_ids = ['CP002842', 'CP004049']
+                    found_accessions = []    # List for existing accession id's
+                    missing_accessions = []  # List for non existing accession id's
+                    accession_ids = acc.accession_list
 
-            for target in accession_ids:        # Loop through list of all accession id's
-                if target in found_accessions:  # If accession id exists skip this id
-                    continue
-                else:
-                    missing_accessions.append(target)   # If accession id does not exist add to list
-                    parts = [missing_accessions[i:i + 1] for i in range(0, len(missing_accessions), 1)]
-                    for partial_list in parts:
-                        # Convert list of accessions to usable input for Entrez.fetch
-                        convert_accession_ids = ",".join(partial_list)
-                        self.fetch_files = Entrez.efetch(db="nucleotide", id=convert_accession_ids,
-                                                                 rettype="gb", retmode="text")
-                    collect.save_genbank_file(self.fetch_files)
-                    self.fetch_files.close()
-            return self.fetch_files
+                    for folders in folder_list:
+                        self.folders = folders   # Extract folder names from list
+                        for accession in accession_ids:                # Extract accessions from each list
+                            complete_path = self.pathway + self.folders + self.path_separator + accession + ".gb"
+                            if os.path.isfile(complete_path):       # Check which files already are available
+                                found_accessions.append(accession)  # Add accessions that already exist to list
 
-        except URLError as an_error:
-            print("Processes interrupted because of: ", an_error.reason)
-        python = sys.executable
-        os.execl(python, python, *sys.argv)  # Restart program
+                    for target in accession_ids:        # Loop through list of all accession id's
+                        if target in found_accessions:  # If accession id exists skip this id
+                            continue
+                        else:
+                            missing_accessions.append(target)   # If accession id does not exist add to list
+                            parts = [missing_accessions[i:i + 1] for i in range(0, len(missing_accessions), 1)]
+                            for partial_list in parts:
+                                # Convert list of accessions to usable input for Entrez.fetch
+                                convert_accession_ids = ",".join(partial_list)
+                                self.fetch_files = Entrez.efetch(db="nucleotide", id=convert_accession_ids,
+                                                                             rettype="gb", retmode="text")
+                            collect.save_genbank_file(self.fetch_files)
+                            self.fetch_files.close()
+                    return self.fetch_files
+
+            except URLError as an_error:
+                restart_program = True
+                count_restarts += 1
+                print("Processes interrupted because of: ", an_error.reason)
+                print("Restarting program..")
 
     def save_genbank_file(self, genbank_files):
         """ Writes all collected genbank files to the right folder

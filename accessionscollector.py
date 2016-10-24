@@ -3,7 +3,6 @@
 
 """
 Author: Elina Wever
-Email: e.e.wever@st.hanze.nl
 Date: 22-09-2016
 Purpose: Collecting and storing all available accession id´s for every micro-organism in a single list
 Version: 0.0.1
@@ -29,13 +28,19 @@ class CollectAccessionIds:
             Input: .ids/.txt files
             Output: A list of all accession id's
         """
+        ids_list = []
+        txt_list = []
 
-        self.file_list = glob.glob(self.pathway+"*.ids")      # Get all folders ending with .ids or .txt (using glob module)
-
-        for lines in fileinput.input(self.file_list):         # Iterate over multiple file lines from different files
-            if lines.__contains__("eukaryota"):               # Skip header
+        self.file_list = glob.glob(self.pathway+"*.ids")     # Get all folders ending with .ids/.txt (using glob module)
+        # http://stackoverflow.com/questions/4568580/python-glob-multiple-filetypes
+        # als extentie eindigt op .ids :
+        for lines in fileinput.input(self.file_list):        # Iterate over multiple file lines from different files
+            if lines.__contains__("eukaryota"):              # Skip header
                 continue
             else:
                 accessions = lines.split("\t")[4]
-                self.accession_list.append(accessions)  # Extract accession id from each line and save in a list
-        return self.accession_list                            # Return list with accession id's
+                accessions = accessions.replace("-", "")    # Remove - sign to avoid Bad Request error
+                self.accession_list.append(accessions)      # Extract accession id from each line and save in a list
+
+        # als extentie eindigt op .txt: accessionscollector2.py
+        return self.accession_list                          # Return list with accession id's (lijst1 + lijst2)

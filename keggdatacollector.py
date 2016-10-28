@@ -15,7 +15,7 @@ from urllib.request import urlopen
 class ProcessEntryFile:
     """This class opens and filters an entry file and retrieves all pathways for each entry(organism)
        Input: Complete entry (text) file from KEGG
-       Output: A filtered text file with only entries
+       Output: Individual files with pathway codes and organism codes
     """
 
     def __init__(self):

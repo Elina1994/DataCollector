@@ -92,7 +92,7 @@ class CollectCompleteGenomes:
                 restart_program = True
                 count_restarts += 1
                 print("Processes interrupted because of: ", an_error.reason)
-                print("Restarting program..")
+                print("Restarting and continuing process..")
 
     def save_genbank_file(self, genbank_files):
         """ Writes all collected genbank files to the right folder

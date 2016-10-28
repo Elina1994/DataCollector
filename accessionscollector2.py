@@ -18,7 +18,7 @@ class CollectAllAccessions:
 
     def __init__(self):
         """Constructor for CollectAllAccessions """
-        self.pathway = acc.pathway + "prokaryotes.txt"  # Use same path as in another class
+        # self.pathway = acc.pathway + "prokaryotes.txt"  # Use same path as in another class
         self.accession_list = []
         self.file_list = []
 
@@ -27,40 +27,44 @@ class CollectAllAccessions:
             Input: Some .txt plus .ids files with a lot of information
             Output: A list with all accession id's from all processed files
         """
-        to_be_filtered_list = []
-        file_types = ("*.ids", "*.txt")
-        txt_files_list = []
-        ids_files_list = []
+        # to_be_filtered_list = []
+        # file_types = ("*.ids", "*.txt")
+        # txt_files_list = []
+        # ids_files_list = []
+        #
+        # for files in file_types:
+        #     self.file_list.extend(glob.glob(acc.pathway + files))
+        #
+        # for names in self.file_list:
+        #
+        #     with open(names, encoding="utf-8") as complete_files:  # Type utf-8 is needed to prevent an error during opening
+        #         filename = str(complete_files.name)
+        #         if filename.endswith(".txt"):
+        #             print(filename)
+        #             for lines in complete_files:
+        #                 if lines.__contains__("Complete Genome"):
+        #                     accessions_version = lines.split("\t")[9]   # Extract accessions from file
+        #                     remove_sign = accessions_version.replace("-", "")
+        #                     accessions = remove_sign.split(".",1)[0]
+        #                     accessions = accessions.split(",")  # Adapt accessions
+        #
+        #                     to_be_filtered_list.append(accessions)  # Add all accessions to list
+        #                     txt_files_list = [i for sublist in to_be_filtered_list for i in sublist]  # Flatten list
+        #
+        #         else:
+        #             for lines in complete_files:
+        #                 if lines.__contains__("eukaryota"):  # Skip header
+        #                     continue
+        #                 else:
+        #                     accessions = lines.split("\t")[4]
+        #                     accessions = accessions.replace("-", "")  # Remove - sign to avoid Bad Request error
+        #                     ids_files_list.append(accessions)  # Extract accession id from each line and save in a list
+        #
+        # self.accession_list = txt_files_list + ids_files_list
+        # return self.accession_list
 
-        for files in file_types:
-            self.file_list.extend(glob.glob(acc.pathway + files))
 
-        for names in self.file_list:
-
-            with open(names, encoding="utf-8") as complete_files:  # Type utf-8 is needed to prevent an error during opening
-                filename = str(complete_files.name)
-                if filename.endswith(".txt"):
-                    for lines in complete_files:
-                        if lines.__contains__("Complete Genome"):
-                            accessions = lines.split("\t")[9]   # Extract accessions from file
-                            accessions = accessions.split(",")  # Adapt accessions
-                            to_be_filtered_list.append(accessions)  # Add all accessions to list
-                            txt_files_list = [i for sublist in to_be_filtered_list for i in sublist]  # Flatten list
-
-                else:
-                    for lines in complete_files:
-                        if lines.__contains__("eukaryota"):  # Skip header
-                            continue
-                        else:
-                            accessions = lines.split("\t")[4]
-                            accessions = accessions.replace("-", "")  # Remove - sign to avoid Bad Request error
-                            ids_files_list.append(accessions)  # Extract accession id from each line and save in a list
-
-        self.accession_list = txt_files_list + ids_files_list
-        return self.accession_list
-
-
-if __name__ == "__main__":
-    acc = accessionscollector.CollectAccessionIds()
-    collect = CollectAllAccessions()
-    collect.filter_file()
+# if __name__ == "__main__":
+#     acc = accessionscollector.CollectAccessionIds()
+#     collect = CollectAllAccessions()
+#     collect.filter_file()

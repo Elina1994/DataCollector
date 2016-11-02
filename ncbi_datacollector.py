@@ -92,7 +92,7 @@ class CollectCompleteGenomes:
                 restart_program = True
                 count_restarts += 1
                 print("Processes interrupted because of: ", an_error.reason)
-                print("Restarting and continuing process..")
+                print("Restarting program and continuing process..")
 
     def save_genbank_file(self, genbank_files):
         """ Writes all collected genbank files to the right folder
@@ -115,7 +115,7 @@ class CollectCompleteGenomes:
 
         for record in genbank_record:
             search_area = record.strip("\n")
-            for rank in self.folder_list:                       # Rank contains: Bacteria,Archaea and Eukaryota
+            for rank in self.folder_list:          # Rank contains: Bacteria,Archaea, Viruses, Viroids and Eukaryota
                 search_organism = re.search(rank+";", search_area) or re.search(rank+"\.", search_area)  # Search for organism name in file
                 if search_organism:                             # If any match is found continue and save records
                     match = search_organism.group(0).strip(";")

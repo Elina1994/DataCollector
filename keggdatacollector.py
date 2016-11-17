@@ -21,7 +21,7 @@ class ProcessEntryFile:
     def __init__(self):
         """Constructor for ProcessEntryFile"""
         self.separator = os.sep
-        self.path_to_organism_file = '//172.16.6.53{0}StageStorage{0}voorbeelddata{0}organism{0}all_organisms.txt'.format(self.separator)
+        self.path_to_organism_file = '//172.16.6.53{0}StageStorage{0}PathwayViewer{0}Datasets{0}Kegg{0}KeggOrganisms_20161117.kegg'.format(self.separator)
         self.path = '//172.16.6.53{0}StageStorage{0}Pathways{0}'.format(self.separator)
         self.filtered_list = []
         self.entry_dict = {}
@@ -56,24 +56,29 @@ class ProcessEntryFile:
            Input: Filtered list with only entries
            Output: List with all results
         """
-
+        print("Start fetching files...")
         # Split list with entry in parts of 96 items per list (creates 44 lists with entries)
         entry_parts = [list(self.entry_dict.keys())[i:i + 96] for i in range(0, len(list(self.entry_dict.keys())), 96)]
 
         for partial_lists in entry_parts:
             for entry in partial_lists:
-                url = "http://rest.kegg.jp/link/" + entry + "/pathway"  # Define url to retrieve data of
-                result = urlopen(url).read()
-                adapted_result = result.decode("utf-8")     # Convert result to usable format
                 pathway_files = self.path + entry + ".txt"
-
-                if os.path.isfile(pathway_files):           # Check if files already exist and skip if True
+                if os.path.isfile(pathway_files):  # Check if files already exist and skip if True
                     continue
                 else:
-                    save_files = open(self.path + entry + ".txt", "w")  # Write files to Pathway map
-                    save_files.write(adapted_result)
-                    save_files.close()
+                    url = "http://rest.kegg.jp/link/" + entry + "/pathway"  # Define url to retrieve data of
+                    result = urlopen(url).read()
+                    adapted_result = result.decode("utf-8")     # Convert result to usable format
+                    if adapted_result.strip() == "":
+                        print("The following entry was not saved because there was no content to display :", entry)
+                        continue
+                    else:
 
+                        print("Retrieving following entry files: ", entry)
+                        save_files = open(self.path + entry + ".txt", "w")  # Write files to Pathway map
+                        save_files.write(adapted_result)
+                        save_files.close()
+        print("Finished fetching files..")
 
 if __name__ == "__main__":
     process = ProcessEntryFile()

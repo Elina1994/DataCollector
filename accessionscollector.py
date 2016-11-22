@@ -9,6 +9,7 @@ Version: 0.0.1
 """
 import os
 import glob
+import sys
 
 
 class CollectAccessionIds:
@@ -17,8 +18,8 @@ class CollectAccessionIds:
     def __init__(self):
         """"Constructor for CollectAccessionIds class"""
         self.accession_list = []      # Create list to store all accessions
-        self.path_separator = os.sep  # Get system specific path separator
-        self.pathway = "//172.16.6.53{0}StageStorage{0}voorbeelddata{0}ncbi_genomes{0}".format(self.path_separator)
+        self.path_separator = os.sep  # Get system specific path_to_pathway_dir separator
+        self.pathway = "//172.16.6.53{0}StageStorage{0}PathwayViewer{0}Datasets{0}Ncbi{0}AccessionFiles{0}".format(self.path_separator)
         self.file_list = []           # Create list to store file names
         self.accession_list = []
 

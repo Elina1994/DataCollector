@@ -7,11 +7,16 @@ Email: e.e.wever@st.hanze.nl
 Date: 20-09-2016
 Purpose: Collecting and storing all complete genomes of every single micro-organism
 Version: 0.0.1
+
+Usage Command Line : python3 ncbi_datacollector.py <name/of/directory/foldername/>
+
+NOTE: accessionscollector.py needs to be stored in the same folder as ncbi_datacollector.py !
 """
 
 from Bio import Entrez
 import os
 import re
+import sys
 from urllib.error import URLError
 import accessionscollector
 
@@ -22,8 +27,9 @@ class CollectCompleteGenomes:
 
     def __init__(self, record_files):
         """Constructor of class CollectCompleteGenomes"""
-        self.path_separator = os.sep    # Get system specific path separator
-        self.pathway = "//172.16.6.53{0}StageStorage{0}Genomes{0}".format(self.path_separator)  # Path to store files in
+        self.path_separator = os.sep    # Get system specific path_to_pathway_dir separator
+        # self.pathway = "//172.16.6.53{0}StageStorage{0}Genomes{0}".format(self.path_separator)  # Path to store files in
+        self.pathway = sys.argv[1]
         self.folder_list = []   # List to store folder names for each species
         self.filename = ""      # Defines the filename for each record
         self.record_files = record_files
@@ -31,7 +37,7 @@ class CollectCompleteGenomes:
 
     def create_folders(self):
         """Creates a folder for every species to collect.
-           Input:  path to directory to save
+           Input:  path_to_pathway_dir to directory to save
            Output: 4 different folders for each species in the created Genomes directory
         """
 
@@ -53,7 +59,7 @@ class CollectCompleteGenomes:
            Input: List of all accession id's
            Output: All complete genomes per species
         """
-
+        print("Starting program and checking for updates (this may take a while) ...")
         restart_program = True
         count_restarts = 0   # Count total amount of restarts to make it limited
         while restart_program:  # Restart program if crash due an external error has been encountered
@@ -61,7 +67,6 @@ class CollectCompleteGenomes:
                 while True and count_restarts < 35:
                     restart_program = False    # Do not restart when no error is encountered
                     Entrez.email = "elinastellark@gmail.com"         # Tell NCBI who you are
-                    # accession_ids = ['CP002842', 'CP004049']
                     found_accessions = []    # List for existing accession id's
                     missing_accessions = []  # List for non existing accession id's
                     accession_ids = acc.accession_list
@@ -86,6 +91,7 @@ class CollectCompleteGenomes:
                                                                              rettype="gb", retmode="text")
                             collect.save_genbank_file(self.fetch_files)
                             self.fetch_files.close()
+                    print("Program finished....")
                     return self.fetch_files
 
             except URLError as an_error:

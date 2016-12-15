@@ -19,10 +19,12 @@ class CollectAccessionIds:
         """"Constructor for CollectAccessionIds class"""
         self.accession_list = []      # Create list to store all accessions
         self.path_separator = os.sep  # Get system specific path_to_pathway_dir separator
-        self.pathway = "//172.16.6.53{0}StageStorage{0}PathwayViewer{0}Datasets{0}Ncbi{0}AccessionFiles{0}".format(self.path_separator)
+        self.pathway = sys.argv[2] + "{0}Datasets{0}Ncbi{0}AccessionFiles{0}".format(self.path_separator)
+        # self.pathway = sys.argv[2] + "{0}Datasets{0}Ncbi{0}AccessionFiles{0}".format(self.path_separator)
         self.file_list = []           # Create list to store file names
         self.accession_list = []
 
+        print(self.pathway)
     def collect_ids(self):
         """ This method reads multiple files and extracts all accession id's
             Input: .ids/.txt files
@@ -32,7 +34,6 @@ class CollectAccessionIds:
         file_types = ("*.ids", "*.txt")  # Define to be read extensions
         txt_files_list = []
         ids_files_list = []
-
         for files in file_types:
             self.file_list.extend(glob.glob(self.pathway + files))  # Create list with files with different extensions
 

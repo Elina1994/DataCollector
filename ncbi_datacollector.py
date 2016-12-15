@@ -28,7 +28,6 @@ class CollectCompleteGenomes:
     def __init__(self, record_files):
         """Constructor of class CollectCompleteGenomes"""
         self.path_separator = os.sep    # Get system specific path_to_pathway_dir separator
-        # self.pathway = "//172.16.6.53{0}StageStorage{0}Genomes{0}".format(self.path_separator)  # Path to store files in
         self.pathway = sys.argv[1]
         self.folder_list = []   # List to store folder names for each species
         self.filename = ""      # Defines the filename for each record
@@ -62,6 +61,8 @@ class CollectCompleteGenomes:
         print("Starting program and checking for updates (this may take a while) ...")
         restart_program = True
         count_restarts = 0   # Count total amount of restarts to make it limited
+        # acc.pathway = sys.argv[2] + "{0}Datasets{0}Ncbi{0}AccessionFiles{0}".format("/")
+        # print(acc.pathway)
         while restart_program:  # Restart program if crash due an external error has been encountered
             try:
                 while True and count_restarts < 35:

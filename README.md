@@ -33,7 +33,7 @@ This package contains different .py files with different functions. These are:
  ncbi_datacollector module to retrieve genbankfiles from NCBI.The files that are used to extract accession numbers are available at:  ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/ (<b>prokaryotes.txt</b>). and at : ftp://ftp.ncbi.nlm.nih.gov/genomes/GENOME_REPORTS/IDS/    (<b>Bacteria.ids, Archaea.ids, Eukaryota.ids, Viruses.ids, Viroids.ids</b>).
  
  #### How do I set up?
- Save this script at exactly the same directory as ncbi_datacollector.py. These scripts depend on each other and without each other retrieval of complete genomes wil fail
+ Save this script at exactly the same directory as ncbi_datacollector.py. These scripts depend on each other and without each other retrieval of complete genomes will fail
  
  #### Limitations
    You are only able to use the text files mentioned above. The other text files available at the link will cause errors within the        script. It is also unnecessary to save other files than mentioned because these do not contain valueable data.

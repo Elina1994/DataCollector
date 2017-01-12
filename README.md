@@ -15,6 +15,10 @@ This package contains different .py files with different functions. These are:
  #### How do I set up ?
    The only installation needed to succesfully run this program is Biopython(1.68) and Python(3.5).
    
+ #### How do I run this script?
+ ##### Command Line Usage : 
+ python3 ncbi_datacollector.py name/of/directory/foldername/to/save/file /directory/of/collected/accession/files/Ncbi
+   
  #### Error handling
    Most of the errors occuring are caught by this data collector module. One of the most common errors are caused by NCBI's servers. It    often occures that this script loses connection with NCBI. If this happens the program will notify you and automatically restarts and    resumes the data retrieval.
    

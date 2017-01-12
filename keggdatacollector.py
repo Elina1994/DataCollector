@@ -23,12 +23,21 @@ class ProcessEntryFile:
 
     def __init__(self):
         """Constructor for ProcessEntryFile"""
-        self.separator = os.sep
+        self.system_separator = os.sep
         self.path_to_organism_file = sys.argv[1]
-        self.path_to_pathway_dir = sys.argv[2]
+        self.path_to_pathway_dir = ""
         self.filtered_list = []
         self.entry_dict = {}
 
+    def determine_platform_and_set_path(self):
+        """Determines if the platform is Windows or Linux based"""
+        # Platform is Windows
+        if os.name == "nt":
+            self.path_to_pathway_dir = sys.argv[2] + self.system_separator
+        else:
+            self.path_to_pathway_dir = sys.argv[2] + self.system_separator
+        return self.path_to_pathway_dir
+        
     def create_folder(self):
         """Creates folder named Pathways"""
 
@@ -41,7 +50,7 @@ class ProcessEntryFile:
            Input: Complete entry text file
            Output: Filtered dictionary with entries and organism name
         """
-
+        print(self.path_to_pathway_dir)
         try:
             with open(self.path_to_organism_file) as unfiltered_file:
                 for line in unfiltered_file:  # Filter plants and animals out of this file
@@ -88,6 +97,7 @@ class ProcessEntryFile:
 
 if __name__ == "__main__":
     process = ProcessEntryFile()
+    process.determine_platform_and_set_path()
     process.create_folder()
     entry_dictionary = process.filter_file()
     process.retrieve_files(entry_dictionary)

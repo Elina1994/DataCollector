@@ -15,7 +15,7 @@ This package contains different .py files with different functions. These are:
  * How do I set up ?
    The only installation needed to succesfully run this program is Biopython(1.68) and Python(3.5).
    
- ** Error handling
+ ### Error handling
    Most of the errors occuring are caught by this data collector module. One of the most common errors are caused by NCBI's servers. It    often occures that this script loses connection with NCBI. If this happens the program will notify you and automatically restarts and    resumes the data retrieval.
    
  ## KEGG Data Collector

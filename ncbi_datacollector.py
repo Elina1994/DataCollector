@@ -8,7 +8,7 @@ Date: 20-09-2016
 Purpose: Collecting and storing all complete genomes of every single micro-organism
 Version: 0.0.2
 
-Usage Command Line : python3 ncbi_datacollector.py <name/of/directory/foldername/>
+Usage Command Line : python3 ncbi_datacollector.py <name/of/directory/foldername>
 
 NOTE: accessionscollector.py needs to be stored in the same folder as ncbi_datacollector.py !
 """

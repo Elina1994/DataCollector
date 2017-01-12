@@ -6,7 +6,7 @@ Author: Elina Wever
 Email: e.e.wever@st.hanze.nl
 Date: 20-09-2016
 Purpose: Collecting and storing all complete genomes of every single micro-organism
-Version: 0.0.1
+Version: 0.0.2
 
 Usage Command Line : python3 ncbi_datacollector.py <name/of/directory/foldername/>
 
@@ -28,11 +28,21 @@ class CollectCompleteGenomes:
     def __init__(self, record_files):
         """Constructor of class CollectCompleteGenomes"""
         self.path_separator = os.sep    # Get system specific path_to_pathway_dir separator
-        self.pathway = sys.argv[1]
+        self.pathway = ""
         self.folder_list = []   # List to store folder names for each species
         self.filename = ""      # Defines the filename for each record
         self.record_files = record_files
         self.fetch_files = ""
+
+
+    def determine_platform_and_set_path(self):
+        """Determines if the platform is Windows or Linux based"""
+        # Platform is Windows
+        if os.name == "nt":
+            self.pathway = sys.argv[1] + self.path_separator
+        else:
+            self.pathway = sys.argv[1] + self.path_separator
+        return self.pathway
 
     def create_folders(self):
         """Creates a folder for every species to collect.
@@ -61,8 +71,6 @@ class CollectCompleteGenomes:
         print("Starting program and checking for updates (this may take a while) ...")
         restart_program = True
         count_restarts = 0   # Count total amount of restarts to make it limited
-        # acc.pathway = sys.argv[2] + "{0}Datasets{0}Ncbi{0}AccessionFiles{0}".format("/")
-        # print(acc.pathway)
         while restart_program:  # Restart program if crash due an external error has been encountered
             try:
                 while True and count_restarts < 35:
@@ -86,11 +94,13 @@ class CollectCompleteGenomes:
                             missing_accessions.append(target)   # If accession id does not exist add to list
                             parts = [missing_accessions[i:i + 1] for i in range(0, len(missing_accessions), 1)]
                             for partial_list in parts:
+                                
                                 # Convert list of accessions to usable input for Entrez.fetch
                                 convert_accession_ids = ",".join(partial_list)
                                 self.fetch_files = Entrez.efetch(db="nucleotide", id=convert_accession_ids,
                                                                              rettype="gb", retmode="text")
                             collect.save_genbank_file(self.fetch_files)
+                            print("Saved genbank file")
                             self.fetch_files.close()
                     print("Program finished....")
                     return self.fetch_files
@@ -136,6 +146,7 @@ class CollectCompleteGenomes:
 if __name__ == "__main__":
     print(__doc__)
     collect = CollectCompleteGenomes("")
+    collect.determine_platform_and_set_path()
     acc = accessionscollector.CollectAccessionIds()
     acc.collect_ids()
     folder_list = collect.create_folders()
